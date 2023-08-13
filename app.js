@@ -1,19 +1,39 @@
 import React from "react";
 import  ReactDOM  from "react-dom/client";
 
-//React.createElement => ReactElemetn(JS Object) => HTMLElement(render)
-const heading = React.createElement("h1", {id: "heading"}, "Wel-come React!")
+//React Element
+const Heading = (
+    <h1 className="heading">
+        Welecome to JSX Syntax😂
+    </h1>  
+);
 
+const elem = <span>React Element </span>
 
+//Normal function components
+const Title = function (){
+    return (
+        <h1 className="head">
+            {elem}
+             Title 😂
+        </h1>  
+    );
+} 
 
-//JSX is not HTML in JS or is xml/html like syntax
-//Jsx transpiled before reaches to js engine - done by PARCEL -> Babel  
+//React Components | arrow function
+// it's component composition 
 
-//JSX => Babel transpiled it to React.createElement => ReactElemetn(JS Object) => HTMLElement(render)
-const JSXHeading = <h1 id="jsxheading">Welecome to JSX Syntax😂</h1>
+const data = 1000;
+const FunctionComponent = () => (
+    <div className="container">
+     <Title />
+     <h2>localhost:{data + 234}</h2>
+     {Title()}
+     <h1 className="heading">I am Function Component </h1> 
+    </div>
+)
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
-console.log(heading)
-console.log(JSXHeading)
-// root.render(heading)
-root.render(JSXHeading)    
+
+// root.render(Heading) 
+root.render(<FunctionComponent />)   
