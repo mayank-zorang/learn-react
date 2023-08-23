@@ -1,73 +1,59 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import RestaurantCard from "./RestaurantCard";
-import resList from "../utils/mockData";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
+    const [newResList, setNewResList] = useState([]);
+    const [searchText, setsearchText] = useState("");
+    const [filterResList, setFilterResList] = useState([]);
 
-    //state variable = super powerful variable 
-    const [newResList, setNewResList] = useState(resList);
+    console.log("body rendered")
+    
+    useEffect(()=>{
+        console.log("useEffect called")
+        fetchData();
+    }, []);
+    
+    const fetchData = async () => {
+        //logic for fetching the data 
+        const data = await fetch(
+            "https://www.swiggy.com/dapi/restaurants/list/v5?lat=22.719515&lng=75.890046&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+        );
 
-    //Normal variable 
-    let list = [];
+        const json = await data.json();
+        //Optional Chaining 
+        setNewResList(json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+        setFilterResList(json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+        
+    }
 
-    //Normal js varialble
-    // let newResList = [
-    //     {
-    //         data: {
-    //           type: "F",
-    //           id: "334475",
-    //           name: "KFC",
-    //           cloudinaryImageId: "bdcd233971b7c81bf77e1fa4471280eb",
-    //           cuisines: ["Burgers", "Biryani", "American", "Snacks", "Fast Food"],
-    //           costForTwo: 40000,
-    //           deliveryTime: 36,
-    //           avgRating: "4.8",
-    //         },
-    //       },
-    //       {
-    //         data: {
-    //           id: "229",
-    //           name: "Meghana Foods",
-    //           cloudinaryImageId: "xqwpuhgnsaf18te7zvtv",
-    //           cuisines: [
-    //             "Biryani",
-    //             "Andhra",
-    //             "South Indian",
-    //             "North Indian",
-    //             "Chinese",
-    //             "Seafood",
-    //           ],
-    //           costForTwo: 50000,
-    //           deliveryTime: 29,
-    //           avgRating: "3.4",
-    //         },
-    //      }, 
-
-    //      {
-    //         data: {
-    //           id: "121603",
-    //           name: "Kannur Food Point",
-    //           cloudinaryImageId: "bmwn4n4bn6n1tcpc8x2h",
-    //           cuisines: ["Kerala", "Chinese"],
-    //           costForTwo: 30000,
-    //           deliveryTime: 31,
-    //           avgRating: "4.1",
-    //         },
-    //     }, 
-    // ]
-
-
-    return (
+    //Conditional Rendering -
+    return newResList?.length === 0 ? <Shimmer /> : (
         <div className="body">
             <div className="filter">
+                <div className="search">
+                    <input 
+                        type="text" 
+                        className="search-box" 
+                        value={searchText}
+                        onChange={(e)=>{
+                            setsearchText(e.target.value);
+                        }}
+                        />
+                    <button onClick={()=>{
+                        const searchRestaurantList = newResList.filter(
+                            (res) => res.info.name.toLowerCase().includes(searchText.toLowerCase())
+                        );
+                        setFilterResList(searchRestaurantList)
+
+                    }}>Search</button>
+                </div>
                 <button 
                     className="filter-btn" 
                     onClick={()=>{  
-                        //need only Filter logic here
-                        const filterResList = newResList.filter((res) => res.data.avgRating > 4
+                        const tmpResList = newResList.filter((res) => res.info.avgRating > 4
                         );
-                        console.log(filterResList);
-                        setNewResList(filterResList);
+                        setFilterResList(tmpResList);
                     }}
                 >
                     Top Rated Restaurants
@@ -75,8 +61,8 @@ const Body = () => {
             </div>    
             <div className="res-container">
                 {
-                    newResList.map((res)=>{
-                        return <RestaurantCard  key={res.data.id} resData ={res}/>
+                    filterResList?.map((res)=>{
+                        return <RestaurantCard  key={res.info.id} resData ={res}/>
                     })
                 }
             </div>
