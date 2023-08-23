@@ -1,7 +1,5 @@
 
-//Restaurants List
-
-export default resList = [
+let resList = [
     {
         type: "restaurant",
         data: {
@@ -1886,3 +1884,5 @@ export default resList = [
         subtype: "basic",
       },
     ];
+
+export default resList
