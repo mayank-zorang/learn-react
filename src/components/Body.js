@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () => {
   const [newResList, setNewResList] = useState([]);
@@ -13,18 +14,23 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    //logic for fetching the data
     const data = await fetch(
       "https://www.swiggy.com/dapi/restaurants/list/v5?lat=22.719515&lng=75.890046&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
     );
     const json = await data.json();
-    console.log(json)
-    //Optional Chaining
-    setNewResList(json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setFilterResList(json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants);    
+    setNewResList(
+      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
+    setFilterResList(
+      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
   };
 
-  //Conditional Rendering 
+  const onlineStatus = useOnlineStatus();
+  if (onlineStatus == false)
+    return <h1>Oop! You are offline, check Your Internet Connect </h1>;
+
+  //Conditional Rendering
   return filterResList?.length === 0 ? (
     <Shimmer />
   ) : (
@@ -64,8 +70,11 @@ const Body = () => {
       </div>
       <div className="res-container">
         {filterResList?.map((res) => {
-          return <Link key={res.info.id} to={"/restaurant/"+ res.info.id}><RestaurantCard resData={res} /></Link>
-          
+          return (
+            <Link key={res.info.id} to={"/restaurant/" + res.info.id}>
+              <RestaurantCard resData={res} />
+            </Link>
+          );
         })}
       </div>
     </div>
