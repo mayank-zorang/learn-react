@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
 .header {
   display: flex;
   justify-content: space-between;
@@ -40,7 +45,7 @@
 
 .res-card:hover {
   /* border: 1px solid black; */
-  cursor: pointer;
+  /* cursor: pointer;
   border-color: #030508;
   transform: scale(1.05);
 }
@@ -71,4 +76,4 @@
 .user-card {
   border: 1px solid black;
   padding: 10px;
-}
+} */ 
