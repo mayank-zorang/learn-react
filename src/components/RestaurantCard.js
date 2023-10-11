@@ -2,7 +2,6 @@ import React from "react";
 import { CDN_URL } from "../utils/constant";
 
 const RestaurantCard = (props) => {
-  // console.log(props)
   const { resData } = props;
   const {
     name,
@@ -13,7 +12,7 @@ const RestaurantCard = (props) => {
     cloudinaryImageId,
   } = resData?.info;
   return (
-    <div className="res-card m-4 p-4 w-52 bg-gray-10  0 rounded-lg  hover:bg-gray-200" >
+    <div className="res-card m-4 p-4 w-52 bg-gray-10  0 rounded-lg  hover:bg-gray-200">
       <img
         className="res-logo rounded-md"
         alt="res-logo"
@@ -26,6 +25,21 @@ const RestaurantCard = (props) => {
       <h4>{deliveryTime} minutes</h4>
     </div>
   );
+};
+
+//High Order Components
+//take input as RestaurantCard ==> return VegRestaurantCard
+export const withVegLabel = (RestaurantCard) => {
+  return (props) => {
+    return (
+      <div>
+        <label className="absolute bg-green-500 text-white m-2 p-2 rounded-lg">
+          Veg Restaurant
+        </label>
+        <RestaurantCard {...props} />
+      </div>
+    );
+  };
 };
 
 export default RestaurantCard;
