@@ -3,11 +3,15 @@ import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import { withVegLabel } from "./RestaurantCard";
 
 const Body = () => {
   const [newResList, setNewResList] = useState([]);
   const [searchText, setsearchText] = useState("");
   const [filterResList, setFilterResList] = useState([]);
+
+  const RestaurantCardVeg = withVegLabel(RestaurantCard);
+
 
   useEffect(() => {
     fetchData();
@@ -19,10 +23,10 @@ const Body = () => {
     );
     const json = await data.json();
     setNewResList(
-      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
     setFilterResList(
-      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
 
@@ -45,7 +49,8 @@ const Body = () => {
               setsearchText(e.target.value);
             }}
           />
-          <button className="bg-green-100 px-4 py-1 m-4 rounded-md"
+          <button
+            className="bg-green-100 px-4 py-1 m-4 rounded-md"
             onClick={() => {
               const searchRestaurantList = newResList.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
@@ -72,7 +77,11 @@ const Body = () => {
         {filterResList?.map((res) => {
           return (
             <Link key={res.info.id} to={"/restaurant/" + res.info.id}>
-              <RestaurantCard resData={res} />
+              {res?.info?.veg ? (
+                <RestaurantCardVeg resData={res} />
+              ) : (
+                <RestaurantCard resData={res} />
+              )}
             </Link>
           );
         })}
