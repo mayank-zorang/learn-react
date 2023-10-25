@@ -1,7 +1,17 @@
+import React from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../utils/cartSlice";
 const IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/";
 
 const MenuList = ({ items }) => {
+  const dispatch = useDispatch();
+
+  const handleAddItem = (item) => {
+    //dispatch action
+    dispatch(addItem(item));
+    
+  };
   return (
     <div>
       {items.map((item) => (
@@ -26,7 +36,10 @@ const MenuList = ({ items }) => {
           </div>
           <div className="w-3/12 p-4">
             <div className="absolute">
-              <button className="p-2 bg-black text-white shadow-lg m-auto rounded-lg">
+              <button
+                className="p-2 bg-black text-white shadow-lg m-auto rounded-lg"
+                onClick={() => handleAddItem(item)}
+              >
                 Add+
               </button>
             </div>

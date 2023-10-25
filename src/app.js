@@ -1,5 +1,5 @@
-import React, { lazy, Suspense } from "react";
-import ReactDOM from "react-dom/client";
+import React, { lazy, Suspense, useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import Header from "./components/Header";
 import Body from "./components/Body";
 import About from "./components/About";
@@ -8,16 +8,22 @@ import Error from "./components/Error";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import RestaurantMenu from "./components/RestaurantMenu";
 import UserContext from "./utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
 // import Grocery from "./components/Grocery";
 
 const AppLayout = () => {
+  const [userName, setUserName] = useState("Mayank");
+
   return (
-    <UserContext.Provider value={{ loggedInUser: userName }}>
-      <div className="app">
-        <Header />
-        <Outlet />
-      </div>
-    </UserContext.Provider>
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName }}>
+        <div className="app">
+          <Header />
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
@@ -59,4 +65,3 @@ const appRouter = createBrowserRouter([
 ]);
 const root = document.getElementById("root");
 ReactDOM.render(<RouterProvider router={appRouter} />, root);
-
