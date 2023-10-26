@@ -63,3 +63,20 @@ import {Component} from "path"
 - Slice (cardSlice)
 - dispatch(action)
 - Selector
+
+# Type of Testing as Developer
+- Unit Testing
+- Integration
+- End to End testing - e2e testing
+
+# setting up Testing in our app
+- Install React Testing Library
+- Install Jest
+- Install Babel dependencies
+- Configure Bable
+- Configure Pracel config file to disable default bable transpilation
+- jest configuretion 
+- jsom library 
+- install  @babel/preset-react for make jsx work for test case
+- Include  @babel/preset-react inside the babel config
+- Install  @testing-library/jest-dom
